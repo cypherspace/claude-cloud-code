@@ -9,7 +9,7 @@
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_HEALTH" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
@@ -71,11 +71,17 @@
             </intent-filter>
         </activity>
 
-        <!-- Foreground service for active workouts -->
+        <!-- Foreground service for active workouts. Uses specialUse rather than `health`
+             so the timer can run before the user has granted any Health Connect read perms;
+             the FGS is purely a timer with an ongoing notification, not the source of HR data. -->
         <service
             android:name="io.bubblymarble.fitness.core.notifications.WorkoutForegroundService"
             android:exported="false"
-            android:foregroundServiceType="health" />
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="workout_timer_with_ongoing_notification" />
+        </service>
 
         <!-- WorkManager initializer disabled; Hilt provides the configuration -->
         <provider
