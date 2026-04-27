@@ -1,14 +1,12 @@
-# Bubblymarble Design System
+# OldFit Design System
 
 > Personal home-fitness app for Android — workouts, meals, body measurements. Material 3, dark-mode-first, sky/teal palette.
-
-> ⚠️ **Naming note for the user.** Your brief described the brand as **OldFit** — *home fitness for amateurs developing better eating + exercise habits.* The connected codebase is named **Bubblymarble** and ships as that brand (sky/teal Material 3, plans + workouts + meals + measurements). This system follows the **codebase as source of truth** so prototypes will match what actually runs. If OldFit is a rename in flight, swap the wordmark in `assets/` and the brand name in `colors_and_type.css` — everything else (palette, type, components) carries over. Tell me which name to keep and I'll align this fully in one pass.
 
 ---
 
 ## About the product
 
-**Bubblymarble** is a personal Android fitness app, built in Kotlin + Jetpack Compose with Material 3. It is **local-first** (Room DB, no cloud) with optional integrations. Three feature waves:
+**OldFit** is a personal Android fitness app, built in Kotlin + Jetpack Compose with Material 3. It is **local-first** (Room DB, no cloud) with optional integrations. Three feature waves:
 
 - **v1 Workouts** — exercise library, AI-generated plans (Gemini), workout runner with timer, streaks, stats, Health Connect read/write.
 - **v2 Meals** — daily nutrition summary, ingredient search via Open Food Facts, AI photo logging via Gemini Vision, on-device barcode scanner (ML Kit).
@@ -16,7 +14,7 @@
 
 ### Surfaces in this kit
 
-- **Bubblymarble Mobile App** (Android, Material 3, dark + light) — only product surface in the codebase. The UI kit recreates Plans, Workouts (list + Runner), Meals, Measurements, Stats, Settings, Onboarding.
+- **OldFit Mobile App** (Android, Material 3, dark + light) — only product surface in the codebase. The UI kit recreates Plans, Workouts (list + Runner), Meals, Measurements, Stats, Settings, Onboarding.
 
 ### Bottom nav (canonical order)
 
@@ -44,7 +42,7 @@ Icons (Material Symbols): `list_alt`, `fitness_center`, `restaurant`, `straighte
 - `fonts/` — webfonts (Google Fonts links — no licensed fonts shipped)
 - `assets/` — logo mark, favicon, brand SVGs
 - `preview/` — small specimen cards for the Design System tab
-- `ui_kits/app/` — Bubblymarble Mobile App UI kit (`index.html` + JSX components)
+- `ui_kits/app/` — OldFit Mobile App UI kit (`index.html` + JSX components)
 - `core/`, `feature/`, `app/` — imported Kotlin source (read-only reference)
 - `SKILL.md` — agent skill manifest
 

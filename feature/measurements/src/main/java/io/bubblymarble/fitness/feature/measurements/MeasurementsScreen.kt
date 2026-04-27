@@ -51,7 +51,6 @@ fun MeasurementsScreen(viewModel: MeasurementsViewModel = hiltViewModel()) {
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Text("Measurements", style = MaterialTheme.typography.headlineSmall)
 
         SyncBlock(
             available = ui.healthConnectAvailable,

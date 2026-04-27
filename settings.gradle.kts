@@ -20,7 +20,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Bubblymarble"
+rootProject.name = "OldFit"
 
 include(":app")
 

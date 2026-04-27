@@ -19,7 +19,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "io.bubblymarble.fitness"
+        applicationId = "app.oldfit"
         minSdk = 28
         targetSdk = 35
         versionCode = 1

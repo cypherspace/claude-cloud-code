@@ -1,8 +1,12 @@
 package io.bubblymarble.fitness.navigation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.FitnessCenter
@@ -11,21 +15,31 @@ import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Straighten
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import io.bubblymarble.fitness.core.designsystem.theme.LocalFeatureAccents
 import io.bubblymarble.fitness.feature.meals.MealEditorScreen
 import io.bubblymarble.fitness.feature.meals.MealsScreen
 import io.bubblymarble.fitness.feature.meals.scanner.BarcodeScannerScreen
@@ -109,8 +123,14 @@ fun RootNavHost(state: RootState) {
     }
 }
 
-private data class Tab(val route: String, val label: String, val icon: androidx.compose.ui.graphics.vector.ImageVector)
+private data class Tab(
+    val route: String,
+    val label: String,
+    val icon: androidx.compose.ui.graphics.vector.ImageVector,
+    val accent: (io.bubblymarble.fitness.core.designsystem.theme.FeatureAccents) -> Color,
+)
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HomeScaffold(
     onStartSession: (Long) -> Unit,
@@ -118,21 +138,48 @@ private fun HomeScaffold(
     onEditMeal: (Long) -> Unit,
 ) {
     val nav = rememberNavController()
+    val accents = LocalFeatureAccents.current
     val tabs = listOf(
-        Tab(Routes.PLANS, "Plans", Icons.Default.ListAlt),
-        Tab(Routes.WORKOUTS, "Workouts", Icons.Default.FitnessCenter),
-        Tab(Routes.MEALS, "Meals", Icons.Default.Restaurant),
-        Tab(Routes.MEASUREMENTS, "Body", Icons.Default.Straighten),
-        Tab(Routes.STATS, "Stats", Icons.Default.BarChart),
-        Tab(Routes.SETTINGS, "Settings", Icons.Default.Settings),
+        Tab(Routes.PLANS, "Plans", Icons.Default.ListAlt) { it.plans },
+        Tab(Routes.WORKOUTS, "Workouts", Icons.Default.FitnessCenter) { it.workouts },
+        Tab(Routes.MEALS, "Meals", Icons.Default.Restaurant) { it.meals },
+        Tab(Routes.MEASUREMENTS, "Body", Icons.Default.Straighten) { it.body },
+        Tab(Routes.STATS, "Stats", Icons.Default.BarChart) { it.stats },
+        Tab(Routes.SETTINGS, "Settings", Icons.Default.Settings) { it.settings },
     )
+    val backStack by nav.currentBackStackEntryAsState()
+    val currentRoute = backStack?.destination?.route
+    val currentTab = tabs.firstOrNull { it.route == currentRoute } ?: tabs[0]
+
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Box(
+                            Modifier
+                                .size(10.dp)
+                                .clip(RoundedCornerShape(3.dp))
+                                .background(currentTab.accent(accents)),
+                        )
+                        Text(
+                            text = currentTab.label,
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Medium,
+                            modifier = Modifier.padding(start = 12.dp),
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onBackground,
+                ),
+            )
+        },
         bottomBar = {
-            val backStack by nav.currentBackStackEntryAsState()
-            val current = backStack?.destination
-            NavigationBar {
+            NavigationBar(containerColor = MaterialTheme.colorScheme.surfaceContainer) {
                 tabs.forEach { tab ->
-                    val selected = current?.hierarchy?.any { it.route == tab.route } == true
+                    val selected = backStack?.destination?.hierarchy?.any { it.route == tab.route } == true
                     NavigationBarItem(
                         selected = selected,
                         onClick = {
@@ -143,11 +190,19 @@ private fun HomeScaffold(
                             }
                         },
                         icon = { Icon(tab.icon, contentDescription = tab.label) },
-                        label = { Text(tab.label) },
+                        label = { Text(tab.label, style = MaterialTheme.typography.labelSmall) },
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = tab.accent(accents),
+                            selectedTextColor = tab.accent(accents),
+                            indicatorColor = tab.accent(accents).copy(alpha = 0.18f),
+                            unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        ),
                     )
                 }
             }
-        }
+        },
+        containerColor = MaterialTheme.colorScheme.background,
     ) { padding ->
         NavHost(
             navController = nav,

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data-extraction-rules>
     <cloud-backup>
-        <include domain="database" path="bubblymarble.db" />
+        <include domain="database" path="oldfit.db" />
         <include domain="sharedpref" path="user_prefs.xml" />
         <exclude domain="sharedpref" path="secure_prefs.xml" />
     </cloud-backup>
     <device-transfer>
-        <include domain="database" path="bubblymarble.db" />
+        <include domain="database" path="oldfit.db" />
         <include domain="sharedpref" path="user_prefs.xml" />
         <exclude domain="sharedpref" path="secure_prefs.xml" />
     </device-transfer>

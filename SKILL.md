@@ -1,6 +1,6 @@
 ---
-name: bubblymarble-design
-description: Use this skill to generate well-branded interfaces and assets for Bubblymarble (a personal Android fitness app — workouts, meals, body measurements). Contains essential design guidelines, colors, type, fonts, assets, and UI kit components for prototyping.
+name: oldfit-design
+description: Use this skill to generate well-branded interfaces and assets for OldFit (a personal Android fitness app — workouts, meals, body measurements). Contains essential design guidelines, colors, type, fonts, assets, and UI kit components for prototyping.
 user-invocable: true
 ---
 

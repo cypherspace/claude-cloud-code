@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import dagger.hilt.android.AndroidEntryPoint
-import io.bubblymarble.fitness.core.designsystem.theme.BubblymarbleTheme
+import io.bubblymarble.fitness.core.designsystem.theme.OldFitTheme
 import io.bubblymarble.fitness.navigation.RootNavHost
 import io.bubblymarble.fitness.navigation.RootViewModel
 
@@ -17,7 +17,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            BubblymarbleTheme {
+            OldFitTheme {
                 val vm: RootViewModel = androidx.hilt.navigation.compose.hiltViewModel()
                 val state by vm.state.collectAsState()
                 RootNavHost(state = state)

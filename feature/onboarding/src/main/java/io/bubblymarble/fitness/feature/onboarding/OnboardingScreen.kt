@@ -40,7 +40,7 @@ fun OnboardingScreen(
             .verticalScroll(rememberScrollState())
             .padding(24.dp),
     ) {
-        Text("Welcome to Bubblymarble", style = MaterialTheme.typography.headlineSmall)
+        Text("Welcome to OldFit", style = MaterialTheme.typography.headlineSmall)
         Text("Tell us a bit about yourself so we can build a plan.", style = MaterialTheme.typography.bodyMedium)
         Spacer(Modifier.height(16.dp))
 

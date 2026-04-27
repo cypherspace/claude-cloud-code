@@ -29,7 +29,6 @@ fun WorkoutsScreen(
         Modifier.fillMaxSize().padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Text("Today's workouts", style = MaterialTheme.typography.headlineSmall)
         if (templates.isEmpty()) {
             Text("No workouts yet. Generate a plan first.", style = MaterialTheme.typography.bodyMedium)
         } else LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {

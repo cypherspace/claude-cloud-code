@@ -54,6 +54,6 @@ abstract class FitnessDatabase : RoomDatabase() {
     abstract fun bodyMeasurementDao(): BodyMeasurementDao
 
     companion object {
-        const val NAME = "bubblymarble.db"
+        const val NAME = "oldfit.db"
     }
 }

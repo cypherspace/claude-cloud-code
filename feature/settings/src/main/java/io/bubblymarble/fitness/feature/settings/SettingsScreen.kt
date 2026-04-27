@@ -32,7 +32,6 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
     var minute by remember { mutableStateOf(ui.reminderMinute.toString().padStart(2, '0')) }
 
     Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Text("Settings", style = MaterialTheme.typography.headlineSmall)
 
         SectionHeader("Gemini API key")
         Text(if (ui.maskedKey.isBlank()) "Not set" else ui.maskedKey, style = MaterialTheme.typography.bodySmall)
