@@ -1,0 +1,39 @@
+<!doctype html>
+<html><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { margin: 0; padding: 24px; }
+  .nav {
+    display:flex; background: var(--m3-surface-elev-1);
+    border-radius: var(--radius-md);
+    padding: 8px 4px;
+    gap: 0;
+  }
+  .item {
+    flex:1; display:flex; flex-direction:column; align-items:center; gap: 4px;
+    padding: 6px 0; cursor: pointer;
+    color: var(--fg-muted);
+    font: var(--fw-medium) 11px/16px var(--font-sans);
+    letter-spacing: 0.5px;
+  }
+  .item .pill {
+    width: 56px; height: 28px; border-radius: 14px;
+    display:flex; align-items:center; justify-content:center;
+    transition: background var(--duration-short-2) var(--easing-standard);
+  }
+  .item.is-selected .pill { background: color-mix(in oklab, var(--m3-primary) 22%, transparent); }
+  .item.is-selected { color: var(--fg); }
+  .item .ico { font-family: 'Material Icons'; font-size: 22px; }
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+</head>
+<body>
+  <div class="nav">
+    <div class="item"><div class="pill"><span class="ico">list_alt</span></div>Plans</div>
+    <div class="item is-selected"><div class="pill"><span class="ico">fitness_center</span></div>Workouts</div>
+    <div class="item"><div class="pill"><span class="ico">restaurant</span></div>Meals</div>
+    <div class="item"><div class="pill"><span class="ico">straighten</span></div>Body</div>
+    <div class="item"><div class="pill"><span class="ico">bar_chart</span></div>Stats</div>
+    <div class="item"><div class="pill"><span class="ico">settings</span></div>Settings</div>
+  </div>
+</body></html>

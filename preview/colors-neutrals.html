@@ -1,0 +1,22 @@
+<!doctype html>
+<html><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { margin: 0; padding: 24px; }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .swatch { width: 140px; border-radius: var(--radius-md); overflow: hidden; background: var(--bg-card); }
+  .swatch .chip { height: 64px; border: 1px solid var(--border); border-bottom: none; }
+  .swatch .meta { padding: 10px 12px; }
+  .swatch .name { font: var(--fw-medium) 13px/16px var(--font-sans); color: var(--fg); }
+  .swatch .hex  { font: var(--fw-regular) 11px/16px var(--font-mono); color: var(--fg-muted); margin-top: 2px; }
+</style></head>
+<body>
+  <div class="row">
+    <div class="swatch"><div class="chip" style="background:#0B1220"></div><div class="meta"><div class="name">Background</div><div class="hex">#0B1220</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#111827"></div><div class="meta"><div class="name">Surface</div><div class="hex">#111827</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#182238"></div><div class="meta"><div class="name">Surface +1</div><div class="hex">#182238</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#1F2937"></div><div class="meta"><div class="name">Surface var</div><div class="hex">#1F2937</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#334155"></div><div class="meta"><div class="name">Outline</div><div class="hex">#334155</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#E2E8F0"></div><div class="meta"><div class="name">On surface</div><div class="hex">#E2E8F0</div></div></div>
+  </div>
+</body></html>

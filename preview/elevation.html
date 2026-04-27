@@ -1,0 +1,19 @@
+<!doctype html>
+<html><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { margin: 0; padding: 24px; background: var(--m3-background); }
+  .row { display:flex; gap: 14px; flex-wrap: wrap; }
+  .e { width: 150px; padding: 14px; border-radius: 12px; }
+  .e .lbl { font: 11px/14px var(--font-mono); color: var(--fg-muted); }
+  .e .v { font: var(--fw-medium) 13px/16px var(--font-sans); margin-top: 6px; }
+</style></head>
+<body>
+  <div class="row">
+    <div class="e" style="background:#0B1220; outline: 1px solid var(--border)"><div class="lbl">elev 0</div><div class="v">Background</div></div>
+    <div class="e" style="background:#111827"><div class="lbl">elev 1</div><div class="v">Surface (card)</div></div>
+    <div class="e" style="background:#182238"><div class="lbl">elev 2</div><div class="v">Hover / pressed</div></div>
+    <div class="e" style="background:#1D2942"><div class="lbl">elev 3</div><div class="v">Sheet / menu</div></div>
+  </div>
+  <div style="margin-top:12px; font: 12px/16px var(--font-mono); color: var(--fg-muted);">Dark mode = tonal elevation, no drop-shadows</div>
+</body></html>
