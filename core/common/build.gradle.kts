@@ -17,6 +17,7 @@ android {
 
 dependencies {
     implementation(libs.kotlinx.coroutines.core)
+    api(libs.javax.inject)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
     testImplementation(libs.junit)
     testImplementation(libs.truth)
