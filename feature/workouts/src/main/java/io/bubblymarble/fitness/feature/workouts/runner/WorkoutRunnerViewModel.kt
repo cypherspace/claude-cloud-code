@@ -78,7 +78,8 @@ class WorkoutRunnerViewModel @Inject constructor(
             secondsLeft = first.template.targetDurationSec ?: 0,
         )
         startForegroundNotification(template.name, "Set 1 of ${first.template.targetSets}")
-        if (first.template.targetDurationSec != null) startTicker(first.template.targetDurationSec) {
+        val firstDurationSec = first.template.targetDurationSec
+        if (firstDurationSec != null) startTicker(firstDurationSec) {
             completeSet(repsActual = null, weightKg = null)
         }
     }
