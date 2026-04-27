@@ -15,6 +15,7 @@ import io.bubblymarble.fitness.core.common.MainDispatcher
 import io.bubblymarble.fitness.core.common.SystemTimeSource
 import io.bubblymarble.fitness.core.common.TimeSource
 import io.bubblymarble.fitness.core.data.db.FitnessDatabase
+import io.bubblymarble.fitness.core.data.db.dao.BodyMeasurementDao
 import io.bubblymarble.fitness.core.data.db.dao.ExerciseDao
 import io.bubblymarble.fitness.core.data.db.dao.HealthSampleDao
 import io.bubblymarble.fitness.core.data.db.dao.IngredientDao
@@ -45,6 +46,7 @@ object DataModule {
     @Provides fun streakDao(db: FitnessDatabase): StreakDao = db.streakDao()
     @Provides fun ingredientDao(db: FitnessDatabase): IngredientDao = db.ingredientDao()
     @Provides fun mealDao(db: FitnessDatabase): MealDao = db.mealDao()
+    @Provides fun bodyMeasurementDao(db: FitnessDatabase): BodyMeasurementDao = db.bodyMeasurementDao()
 
     @Provides @Singleton
     fun provideTimeSource(): TimeSource = SystemTimeSource()

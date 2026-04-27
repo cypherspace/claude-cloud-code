@@ -4,7 +4,7 @@ A personal fitness app for Android.
 
 - v1 — **workouts**: exercise library, AI-generated plans, workout runner with timer, streaks, stats, Health Connect integration.
 - v2 — **meals**: daily nutrition summary, ingredient search powered by Open Food Facts, AI photo logging via Gemini Vision.
-- Phase 3 (planned) — measurements: vitals, body composition from Health Connect.
+- v3 — **measurements**: weight + body composition imported from Health Connect (Renpho et al.) plus a tape-measurement tracker for chest, waist, hips, biceps, thighs, calves, neck, shoulders.
 
 ## Stack
 
@@ -99,7 +99,20 @@ launch only.
 - A barcode entry-point (`MealEditorViewModel.lookupBarcode`) is in place; a
   CameraX/ML Kit scanner UI can be wired to it without further plumbing.
 
+## Measurements tracker
+
+- **Sync from Health Connect**: one-tap import of the last 30 days of weight,
+  body fat, lean mass, body water, bone mass, height, and BMR. Renpho (and any
+  other smart scale that publishes to Health Connect) lands here automatically;
+  no vendor SDK required.
+- **Manual tape measurements**: chest, waist, hips, biceps (L/R), thighs (L/R),
+  calves (L/R), neck, shoulders. Each row shows the latest value + date and a
+  one-tap input to log a new entry.
+- **Weight trend**: a small in-line sparkline over the most recent entries.
+- **Dedup**: imports from Health Connect are idempotent — re-running a sync
+  doesn't create duplicates (uniqueness is `(type, timestamp, source)`).
+
 ## Roadmap
 
-- Phase 3 — Measurements: Health Connect read for weight + body composition (Renpho already publishes there), tape-measure manual entries.
-- Future — Wear OS companion, multi-device cloud sync if desired.
+- Wear OS companion app for in-workout HR + timer.
+- Optional cloud sync if desired.

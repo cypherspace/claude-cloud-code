@@ -2,6 +2,7 @@ package io.bubblymarble.fitness.core.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import io.bubblymarble.fitness.core.data.db.dao.BodyMeasurementDao
 import io.bubblymarble.fitness.core.data.db.dao.ExerciseDao
 import io.bubblymarble.fitness.core.data.db.dao.HealthSampleDao
 import io.bubblymarble.fitness.core.data.db.dao.IngredientDao
@@ -50,6 +51,7 @@ abstract class FitnessDatabase : RoomDatabase() {
     abstract fun streakDao(): StreakDao
     abstract fun ingredientDao(): IngredientDao
     abstract fun mealDao(): MealDao
+    abstract fun bodyMeasurementDao(): BodyMeasurementDao
 
     companion object {
         const val NAME = "bubblymarble.db"

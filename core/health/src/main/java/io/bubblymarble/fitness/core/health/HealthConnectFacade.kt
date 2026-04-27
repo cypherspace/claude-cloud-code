@@ -3,16 +3,25 @@ package io.bubblymarble.fitness.core.health
 import android.content.Context
 import androidx.health.connect.client.HealthConnectClient
 import androidx.health.connect.client.permission.HealthPermission
+import androidx.health.connect.client.records.BasalMetabolicRateRecord
+import androidx.health.connect.client.records.BodyFatRecord
+import androidx.health.connect.client.records.BodyWaterMassRecord
+import androidx.health.connect.client.records.BoneMassRecord
 import androidx.health.connect.client.records.DistanceRecord
 import androidx.health.connect.client.records.ExerciseSessionRecord
 import androidx.health.connect.client.records.HeartRateRecord
+import androidx.health.connect.client.records.HeightRecord
+import androidx.health.connect.client.records.LeanBodyMassRecord
 import androidx.health.connect.client.records.OxygenSaturationRecord
 import androidx.health.connect.client.records.StepsRecord
 import androidx.health.connect.client.records.TotalCaloriesBurnedRecord
+import androidx.health.connect.client.records.WeightRecord
 import androidx.health.connect.client.request.ReadRecordsRequest
 import androidx.health.connect.client.time.TimeRangeFilter
 import dagger.hilt.android.qualifiers.ApplicationContext
+import io.bubblymarble.fitness.core.data.db.entities.BodyMeasurementEntity
 import io.bubblymarble.fitness.core.data.db.entities.HealthSampleEntity
+import io.bubblymarble.fitness.core.data.model.MeasurementType
 import java.time.Instant
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -40,6 +49,13 @@ class HealthConnectFacade @Inject constructor(
         HealthPermission.getReadPermission(DistanceRecord::class),
         HealthPermission.getReadPermission(TotalCaloriesBurnedRecord::class),
         HealthPermission.getReadPermission(ExerciseSessionRecord::class),
+        HealthPermission.getReadPermission(WeightRecord::class),
+        HealthPermission.getReadPermission(BodyFatRecord::class),
+        HealthPermission.getReadPermission(LeanBodyMassRecord::class),
+        HealthPermission.getReadPermission(BoneMassRecord::class),
+        HealthPermission.getReadPermission(BodyWaterMassRecord::class),
+        HealthPermission.getReadPermission(HeightRecord::class),
+        HealthPermission.getReadPermission(BasalMetabolicRateRecord::class),
     )
 
     val writePermissions: Set<String> = setOf(
@@ -124,6 +140,64 @@ class HealthConnectFacade @Inject constructor(
         }
         return out
     }
+
+    /**
+     * Reads body-composition rows from Health Connect between [from] and [until]. Each row is a
+     * separate measurement event. Renpho and other smart-scale apps publish here, so this is the
+     * single integration point Bubblymarble needs for scale data. Returns rows ready to hand to
+     * [BodyMeasurementRepository.importFromSource].
+     */
+    suspend fun readBodyMeasurements(from: Instant, until: Instant): List<BodyMeasurementEntity> {
+        val c = client ?: return emptyList()
+        val range = TimeRangeFilter.between(from, until)
+        val out = mutableListOf<BodyMeasurementEntity>()
+
+        runCatching {
+            c.readRecords(ReadRecordsRequest(WeightRecord::class, range)).records.forEach { rec ->
+                out += entry(MeasurementType.WEIGHT_KG, rec.time, rec.weight.inKilograms, rec.metadata.dataOrigin.packageName)
+            }
+        }
+        runCatching {
+            c.readRecords(ReadRecordsRequest(BodyFatRecord::class, range)).records.forEach { rec ->
+                out += entry(MeasurementType.BODY_FAT_PERCENT, rec.time, rec.percentage.value, rec.metadata.dataOrigin.packageName)
+            }
+        }
+        runCatching {
+            c.readRecords(ReadRecordsRequest(LeanBodyMassRecord::class, range)).records.forEach { rec ->
+                out += entry(MeasurementType.LEAN_MASS_KG, rec.time, rec.mass.inKilograms, rec.metadata.dataOrigin.packageName)
+            }
+        }
+        runCatching {
+            c.readRecords(ReadRecordsRequest(BoneMassRecord::class, range)).records.forEach { rec ->
+                out += entry(MeasurementType.BONE_MASS_KG, rec.time, rec.mass.inKilograms, rec.metadata.dataOrigin.packageName)
+            }
+        }
+        runCatching {
+            c.readRecords(ReadRecordsRequest(BodyWaterMassRecord::class, range)).records.forEach { rec ->
+                out += entry(MeasurementType.BODY_WATER_KG, rec.time, rec.mass.inKilograms, rec.metadata.dataOrigin.packageName)
+            }
+        }
+        runCatching {
+            c.readRecords(ReadRecordsRequest(HeightRecord::class, range)).records.forEach { rec ->
+                out += entry(MeasurementType.HEIGHT_CM, rec.time, rec.height.inMeters * 100.0, rec.metadata.dataOrigin.packageName)
+            }
+        }
+        runCatching {
+            c.readRecords(ReadRecordsRequest(BasalMetabolicRateRecord::class, range)).records.forEach { rec ->
+                out += entry(MeasurementType.BMR_KCAL, rec.time, rec.basalMetabolicRate.inKilocaloriesPerDay, rec.metadata.dataOrigin.packageName)
+            }
+        }
+        return out
+    }
+
+    private fun entry(type: MeasurementType, time: Instant, value: Double, source: String): BodyMeasurementEntity =
+        BodyMeasurementEntity(
+            type = type.name,
+            timestampEpochMs = time.toEpochMilli(),
+            value = value,
+            unit = type.unit,
+            source = "healthconnect:$source",
+        )
 
     suspend fun writeExerciseSession(
         title: String,

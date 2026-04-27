@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.ListAlt
 import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Straighten
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -26,6 +27,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import io.bubblymarble.fitness.feature.meals.MealEditorScreen
 import io.bubblymarble.fitness.feature.meals.MealsScreen
+import io.bubblymarble.fitness.feature.measurements.MeasurementsScreen
 import io.bubblymarble.fitness.feature.onboarding.OnboardingScreen
 import io.bubblymarble.fitness.feature.plans.PlansScreen
 import io.bubblymarble.fitness.feature.settings.SettingsScreen
@@ -39,6 +41,7 @@ private object Routes {
     const val PLANS = "plans"
     const val WORKOUTS = "workouts"
     const val MEALS = "meals"
+    const val MEASUREMENTS = "measurements"
     const val STATS = "stats"
     const val SETTINGS = "settings"
     const val RUNNER = "runner/{sessionId}"
@@ -98,6 +101,7 @@ private fun HomeScaffold(
         Tab(Routes.PLANS, "Plans", Icons.Default.ListAlt),
         Tab(Routes.WORKOUTS, "Workouts", Icons.Default.FitnessCenter),
         Tab(Routes.MEALS, "Meals", Icons.Default.Restaurant),
+        Tab(Routes.MEASUREMENTS, "Body", Icons.Default.Straighten),
         Tab(Routes.STATS, "Stats", Icons.Default.BarChart),
         Tab(Routes.SETTINGS, "Settings", Icons.Default.Settings),
     )
@@ -132,6 +136,7 @@ private fun HomeScaffold(
             composable(Routes.PLANS) { PlansScreen() }
             composable(Routes.WORKOUTS) { WorkoutsScreen(onStartSession = onStartSession) }
             composable(Routes.MEALS) { MealsScreen(onAddMeal = onAddMeal, onEditMeal = onEditMeal) }
+            composable(Routes.MEASUREMENTS) { MeasurementsScreen() }
             composable(Routes.STATS) { StatsScreen() }
             composable(Routes.SETTINGS) { SettingsScreen() }
         }
