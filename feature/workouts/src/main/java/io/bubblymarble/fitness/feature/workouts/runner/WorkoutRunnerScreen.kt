@@ -1,6 +1,7 @@
 package io.bubblymarble.fitness.feature.workouts.runner
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -54,14 +56,14 @@ fun WorkoutRunnerScreen(
                 Text("Session complete", style = MaterialTheme.typography.titleLarge)
                 Text("Streak updated. Nice work, #$sessionId.", style = MaterialTheme.typography.bodyMedium)
             }
-            RunnerPhase.EXERCISE -> ExerciseBlock(state, viewModel)
-            RunnerPhase.REST -> RestBlock(state, viewModel)
+            RunnerPhase.EXERCISE -> ExerciseBlock(state, viewModel, onFinish)
+            RunnerPhase.REST -> RestBlock(state, viewModel, onFinish)
         }
     }
 }
 
 @Composable
-private fun ExerciseBlock(state: RunnerState, vm: WorkoutRunnerViewModel) {
+private fun ExerciseBlock(state: RunnerState, vm: WorkoutRunnerViewModel, onFinish: () -> Unit) {
     val item = state.currentItem ?: return
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text("Exercise ${state.currentItemIndex + 1} of ${state.items.size}", style = MaterialTheme.typography.labelLarge)
@@ -97,19 +99,34 @@ private fun ExerciseBlock(state: RunnerState, vm: WorkoutRunnerViewModel) {
             onClick = { vm.completeSet(repsActual = reps.toIntOrNull(), weightKg = weight.toDoubleOrNull()) },
             modifier = Modifier.fillMaxWidth(),
         ) { Text("Complete set") }
-        OutlinedButton(onClick = { vm.cancel() }, modifier = Modifier.fillMaxWidth()) {
-            Text("Cancel workout")
-        }
+        OutlinedButton(
+            onClick = { vm.cancel(onCancelled = onFinish) },
+            modifier = Modifier.fillMaxWidth(),
+        ) { Text("Cancel workout") }
     }
 }
 
 @Composable
-private fun RestBlock(state: RunnerState, vm: WorkoutRunnerViewModel) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+private fun RestBlock(state: RunnerState, vm: WorkoutRunnerViewModel, onFinish: () -> Unit) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxWidth(),
+    ) {
         Text("Rest", style = MaterialTheme.typography.titleLarge)
-        Text("${state.secondsLeft}s remaining", style = MaterialTheme.typography.headlineMedium)
+        Box(Modifier.fillMaxWidth().padding(top = 8.dp), contentAlignment = Alignment.Center) {
+            CircularGradientTimer(
+                secondsLeft = state.secondsLeft,
+                totalSeconds = state.phaseTotalSec.coerceAtLeast(1),
+            )
+        }
+        Spacer(Modifier.height(4.dp))
         Button(onClick = { vm.skipRest() }, modifier = Modifier.fillMaxWidth()) {
             Text("Skip rest")
         }
+        OutlinedButton(
+            onClick = { vm.cancel(onCancelled = onFinish) },
+            modifier = Modifier.fillMaxWidth(),
+        ) { Text("Cancel workout") }
     }
 }

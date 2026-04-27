@@ -48,4 +48,8 @@ class PlansViewModel @Inject constructor(
             }
         }
     }
+
+    fun delete(id: Long) {
+        viewModelScope.launch { templates.delete(id) }
+    }
 }

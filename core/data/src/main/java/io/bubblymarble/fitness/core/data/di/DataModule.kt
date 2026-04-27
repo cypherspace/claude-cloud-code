@@ -36,6 +36,10 @@ object DataModule {
     @Provides @Singleton
     fun provideDatabase(@ApplicationContext ctx: Context): FitnessDatabase =
         Room.databaseBuilder(ctx, FitnessDatabase::class.java, FitnessDatabase.NAME)
+            // Pre-1.0 personal-use app: schema changes wipe and re-seed rather than
+            // ship hand-written migrations. Onboarding will repopulate exercises +
+            // user profile on next launch.
+            .fallbackToDestructiveMigration(dropAllTables = true)
             .build()
 
     @Provides fun exerciseDao(db: FitnessDatabase): ExerciseDao = db.exerciseDao()

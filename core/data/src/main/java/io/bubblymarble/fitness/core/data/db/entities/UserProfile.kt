@@ -13,6 +13,7 @@ data class UserProfileEntity(
     val goalType: String,
     val weeklyTargetSessions: Int,
     val equipmentAccess: String,
+    val ownedEquipment: String = "",
     val experienceLevel: String,
     val injuryNotes: String? = null,
     val createdAtEpochMs: Long,

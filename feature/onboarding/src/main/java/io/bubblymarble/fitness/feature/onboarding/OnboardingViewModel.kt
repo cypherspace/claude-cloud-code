@@ -3,6 +3,7 @@ package io.bubblymarble.fitness.feature.onboarding
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.bubblymarble.fitness.core.data.model.Equipment
 import io.bubblymarble.fitness.core.data.model.EquipmentAccess
 import io.bubblymarble.fitness.core.data.model.ExperienceLevel
 import io.bubblymarble.fitness.core.data.model.GoalType
@@ -22,6 +23,7 @@ data class OnboardingState(
     val goal: GoalType = GoalType.GENERAL_FITNESS,
     val experience: ExperienceLevel = ExperienceLevel.BEGINNER,
     val equipment: EquipmentAccess = EquipmentAccess.MINIMAL_HOME,
+    val ownedEquipment: Set<String> = emptySet(),
     val weeklyTarget: Int = 3,
     val saving: Boolean = false,
 )
@@ -39,7 +41,19 @@ class OnboardingViewModel @Inject constructor(
     fun setName(v: String) = _state.update { it.copy(displayName = v) }
     fun setGoal(g: GoalType) = _state.update { it.copy(goal = g) }
     fun setExperience(e: ExperienceLevel) = _state.update { it.copy(experience = e) }
-    fun setEquipment(e: EquipmentAccess) = _state.update { it.copy(equipment = e) }
+    fun setEquipment(e: EquipmentAccess) = _state.update { state ->
+        // When the user moves out of MINIMAL_HOME, drop any owned-equipment selections.
+        state.copy(
+            equipment = e,
+            ownedEquipment = if (e == EquipmentAccess.MINIMAL_HOME) state.ownedEquipment else emptySet(),
+        )
+    }
+    fun toggleEquipment(slug: String) = _state.update { state ->
+        state.copy(
+            ownedEquipment = if (slug in state.ownedEquipment) state.ownedEquipment - slug
+            else state.ownedEquipment + slug,
+        )
+    }
     fun setWeeklyTarget(n: Int) = _state.update { it.copy(weeklyTarget = n.coerceIn(1, 7)) }
 
     fun finish(onDone: () -> Unit) {
@@ -48,7 +62,6 @@ class OnboardingViewModel @Inject constructor(
         _state.update { it.copy(saving = true) }
         viewModelScope.launch {
             seeder.seedIfEmpty()
-            // touch the repo so the cold flow is materialized once
             exercises.count()
             profiles.save(
                 UserProfile(
@@ -59,6 +72,7 @@ class OnboardingViewModel @Inject constructor(
                     goal = s.goal,
                     weeklyTargetSessions = s.weeklyTarget,
                     equipment = s.equipment,
+                    ownedEquipment = Equipment.resolve(s.equipment, s.ownedEquipment),
                     experience = s.experience,
                     injuryNotes = null,
                 )

@@ -39,7 +39,7 @@ import io.bubblymarble.fitness.core.data.db.entities.WorkoutTemplateExerciseEnti
         MealItemEntity::class,
         BodyMeasurementEntity::class,
     ],
-    version = 1,
+    version = 2,
     exportSchema = true,
 )
 abstract class FitnessDatabase : RoomDatabase() {

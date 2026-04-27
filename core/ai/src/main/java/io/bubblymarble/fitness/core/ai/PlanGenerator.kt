@@ -1,7 +1,7 @@
 package io.bubblymarble.fitness.core.ai
 
 import io.bubblymarble.fitness.core.common.TimeSource
-import io.bubblymarble.fitness.core.data.model.EquipmentAccess
+import io.bubblymarble.fitness.core.data.model.Equipment
 import io.bubblymarble.fitness.core.data.model.Exercise
 import io.bubblymarble.fitness.core.data.model.ExperienceLevel
 import io.bubblymarble.fitness.core.data.model.GoalType
@@ -38,14 +38,15 @@ class PlanGenerator @Inject constructor(
     /** Generates a plan via Gemini, falling back to a deterministic template if the AI is unavailable. */
     suspend fun generate(profile: UserProfile, request: PlanRequest): List<WorkoutTemplate> {
         val key = securePrefs.geminiKey()
-        val catalogue = exercises.observeAllSnapshot()
+        val owned = Equipment.resolve(profile.equipment, profile.ownedEquipment)
+        val catalogue = exercises.observeAllSnapshot().filter { matchesOwned(it, owned) }
         if (key.isNullOrBlank() || catalogue.isEmpty()) {
             return FallbackPlan.build(profile, request, catalogue, time.now().toEpochMilli())
         }
         return runCatching {
             val raw = gemini.generateJson(
                 apiKey = key,
-                prompt = buildPrompt(profile, request, catalogue),
+                prompt = buildPrompt(profile, request, catalogue, owned),
                 responseSchema = planSchema(),
             )
             val parsed = json.decodeFromString(GeneratedPlan.serializer(), raw)
@@ -55,8 +56,14 @@ class PlanGenerator @Inject constructor(
         }
     }
 
-    private fun buildPrompt(profile: UserProfile, req: PlanRequest, catalogue: List<Exercise>): String {
+    private fun buildPrompt(
+        profile: UserProfile,
+        req: PlanRequest,
+        catalogue: List<Exercise>,
+        owned: Set<String>,
+    ): String {
         val cat = catalogue.joinToString("\n") { "- ${it.id}: ${it.name} (${it.primaryMuscle}, ${it.equipment}, ${it.level})" }
+        val ownedDesc = owned.sorted().joinToString(", ")
         return """
             You are a certified strength coach. Generate a ${req.weeks}-week plan with
             ${req.sessionsPerWeek} sessions per week, each ${req.minutesPerSession} minutes.
@@ -64,16 +71,25 @@ class PlanGenerator @Inject constructor(
             Trainee profile:
             - Goal: ${profile.goal}
             - Experience: ${profile.experience}
-            - Equipment available: ${profile.equipment}
+            - Equipment access tier: ${profile.equipment}
+            - Owned equipment: $ownedDesc
             - Weekly sessions target: ${profile.weeklyTargetSessions}
             - Injury notes: ${profile.injuryNotes ?: "none"}
 
-            Use ONLY exercises from this catalogue (referencing by id):
+            Use ONLY exercises from this catalogue (referenced by id). The catalogue has
+            already been filtered to the trainee's owned equipment, so you do not need
+            to filter further:
             $cat
 
             Return JSON matching the provided schema. Each session should have a focused theme,
             sensible exercise ordering (compounds before isolations), and rest tuned to the goal.
         """.trimIndent()
+    }
+
+    private fun matchesOwned(ex: Exercise, owned: Set<String>): Boolean {
+        val slug = ex.equipment.lowercase().trim()
+        if (slug.isBlank()) return Equipment.BODYWEIGHT in owned
+        return slug in owned
     }
 
     private fun planSchema(): JsonObject = buildJsonObject {
@@ -189,7 +205,6 @@ internal object FallbackPlan {
 
         return days.mapIndexed { idx, (name, muscles) ->
             val items = muscles.flatMap { m -> byMuscle[m].orEmpty() }
-                .filter { matchesEquipment(it, profile.equipment) }
                 .distinctBy { it.id }
                 .take(5)
                 .mapIndexed { i, ex ->
@@ -213,15 +228,6 @@ internal object FallbackPlan {
                 items = items,
             )
         }.filter { it.items.isNotEmpty() }
-    }
-
-    private fun matchesEquipment(ex: Exercise, equipment: EquipmentAccess): Boolean {
-        val e = ex.equipment.lowercase()
-        return when (equipment) {
-            EquipmentAccess.BODYWEIGHT_ONLY -> e.contains("body") || e.contains("none") || e.isBlank()
-            EquipmentAccess.MINIMAL_HOME -> !e.contains("cable") && !e.contains("machine")
-            EquipmentAccess.FULL_GYM -> true
-        }
     }
 }
 

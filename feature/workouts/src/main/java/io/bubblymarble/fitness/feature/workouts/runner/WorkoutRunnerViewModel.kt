@@ -68,6 +68,7 @@ class WorkoutRunnerViewModel @Inject constructor(
             return
         }
         val first = resolved.first()
+        val firstDurationSec = first.template.targetDurationSec ?: 0
         _state.value = RunnerState(
             phase = RunnerPhase.EXERCISE,
             templateName = template.name,
@@ -75,11 +76,11 @@ class WorkoutRunnerViewModel @Inject constructor(
             currentItemIndex = 0,
             currentSet = 1,
             totalSetsForCurrent = first.template.targetSets,
-            secondsLeft = first.template.targetDurationSec ?: 0,
+            secondsLeft = firstDurationSec,
+            phaseTotalSec = firstDurationSec,
         )
         startForegroundNotification(template.name, "Set 1 of ${first.template.targetSets}")
-        val firstDurationSec = first.template.targetDurationSec
-        if (firstDurationSec != null) startTicker(firstDurationSec) {
+        if (firstDurationSec > 0) startTicker(firstDurationSec) {
             completeSet(repsActual = null, weightKg = null)
         }
     }
@@ -110,9 +111,17 @@ class WorkoutRunnerViewModel @Inject constructor(
     }
 
     private fun enterRest(seconds: Int) {
-        _state.update { it.copy(phase = RunnerPhase.REST, secondsLeft = seconds) }
+        _state.update { it.copy(phase = RunnerPhase.REST, secondsLeft = seconds, phaseTotalSec = seconds) }
         startTicker(seconds) {
-            _state.update { it.copy(phase = RunnerPhase.EXERCISE, currentSet = it.currentSet + 1, secondsLeft = it.currentItem?.template?.targetDurationSec ?: 0) }
+            _state.update {
+                val nextDuration = it.currentItem?.template?.targetDurationSec ?: 0
+                it.copy(
+                    phase = RunnerPhase.EXERCISE,
+                    currentSet = it.currentSet + 1,
+                    secondsLeft = nextDuration,
+                    phaseTotalSec = nextDuration,
+                )
+            }
             startSetTimerIfNeeded()
         }
     }
@@ -124,12 +133,14 @@ class WorkoutRunnerViewModel @Inject constructor(
                 s.copy(phase = RunnerPhase.COMPLETE, currentItemIndex = nextIdx)
             } else {
                 val next = s.items[nextIdx]
+                val dur = next.template.targetDurationSec ?: 0
                 s.copy(
                     currentItemIndex = nextIdx,
                     currentSet = 1,
                     totalSetsForCurrent = next.template.targetSets,
                     phase = RunnerPhase.EXERCISE,
-                    secondsLeft = next.template.targetDurationSec ?: 0,
+                    secondsLeft = dur,
+                    phaseTotalSec = dur,
                 )
             }
         }
@@ -186,11 +197,12 @@ class WorkoutRunnerViewModel @Inject constructor(
         stopForegroundNotification()
     }
 
-    fun cancel() {
+    fun cancel(onCancelled: () -> Unit = {}) {
         ticker?.cancel()
         viewModelScope.launch {
             sessions.cancel(sessionId)
             stopForegroundNotification()
+            onCancelled()
         }
     }
 

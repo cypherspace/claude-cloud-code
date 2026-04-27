@@ -15,6 +15,7 @@ data class RunnerState(
     val currentSet: Int = 1,
     val totalSetsForCurrent: Int = 0,
     val secondsLeft: Int = 0,
+    val phaseTotalSec: Int = 0,
     val errorMessage: String? = null,
 ) {
     val currentItem: ResolvedItem?

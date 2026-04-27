@@ -46,6 +46,7 @@ import io.bubblymarble.fitness.feature.meals.scanner.BarcodeScannerScreen
 import io.bubblymarble.fitness.feature.measurements.MeasurementsScreen
 import io.bubblymarble.fitness.feature.onboarding.OnboardingScreen
 import io.bubblymarble.fitness.feature.plans.PlansScreen
+import io.bubblymarble.fitness.feature.plans.editor.PlanEditorScreen
 import io.bubblymarble.fitness.feature.settings.SettingsScreen
 import io.bubblymarble.fitness.feature.stats.StatsScreen
 import io.bubblymarble.fitness.feature.workouts.WorkoutsScreen
@@ -63,9 +64,11 @@ private object Routes {
     const val RUNNER = "runner/{sessionId}"
     const val MEAL_EDITOR = "meal_editor/{mealId}"
     const val MEAL_SCANNER = "meal_scanner"
+    const val PLAN_EDITOR = "plan_editor/{templateId}"
     const val SCANNED_BARCODE_KEY = "scanned_barcode"
     fun runner(sessionId: Long) = "runner/$sessionId"
     fun mealEditor(mealId: Long?) = "meal_editor/${mealId ?: 0L}"
+    fun planEditor(templateId: Long) = "plan_editor/$templateId"
 }
 
 @Composable
@@ -94,7 +97,11 @@ fun RootNavHost(state: RootState) {
                 onStartSession = { id -> nav.navigate(Routes.runner(id)) },
                 onAddMeal = { nav.navigate(Routes.mealEditor(null)) },
                 onEditMeal = { id -> nav.navigate(Routes.mealEditor(id)) },
+                onEditPlan = { id -> nav.navigate(Routes.planEditor(id)) },
             )
+        }
+        composable(Routes.PLAN_EDITOR) {
+            PlanEditorScreen(onSaved = { nav.popBackStack() })
         }
         composable(Routes.RUNNER) { entry ->
             val id = entry.arguments?.getString("sessionId")?.toLongOrNull() ?: 0L
@@ -136,6 +143,7 @@ private fun HomeScaffold(
     onStartSession: (Long) -> Unit,
     onAddMeal: () -> Unit,
     onEditMeal: (Long) -> Unit,
+    onEditPlan: (Long) -> Unit,
 ) {
     val nav = rememberNavController()
     val accents = LocalFeatureAccents.current
@@ -209,7 +217,7 @@ private fun HomeScaffold(
             startDestination = Routes.PLANS,
             modifier = Modifier.fillMaxSize().padding(padding),
         ) {
-            composable(Routes.PLANS) { PlansScreen() }
+            composable(Routes.PLANS) { PlansScreen(onEditTemplate = onEditPlan) }
             composable(Routes.WORKOUTS) { WorkoutsScreen(onStartSession = onStartSession) }
             composable(Routes.MEALS) { MealsScreen(onAddMeal = onAddMeal, onEditMeal = onEditMeal) }
             composable(Routes.MEASUREMENTS) { MeasurementsScreen() }

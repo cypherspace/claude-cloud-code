@@ -19,6 +19,7 @@ data class UserProfile(
     val goal: GoalType,
     val weeklyTargetSessions: Int,
     val equipment: EquipmentAccess,
+    val ownedEquipment: Set<String> = emptySet(),
     val experience: ExperienceLevel,
     val injuryNotes: String?,
 )
@@ -52,7 +53,8 @@ data class TemplateItem(
     val targetReps: Int?,
     val targetDurationSec: Int?,
     val targetRestSec: Int,
-    val notes: String?,
+    val targetWeightKg: Double? = null,
+    val notes: String? = null,
 )
 
 data class WorkoutSession(

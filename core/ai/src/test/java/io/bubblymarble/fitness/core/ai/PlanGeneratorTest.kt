@@ -1,6 +1,7 @@
 package io.bubblymarble.fitness.core.ai
 
 import com.google.common.truth.Truth.assertThat
+import io.bubblymarble.fitness.core.data.model.Equipment
 import io.bubblymarble.fitness.core.data.model.EquipmentAccess
 import io.bubblymarble.fitness.core.data.model.Exercise
 import io.bubblymarble.fitness.core.data.model.ExperienceLevel
@@ -17,7 +18,10 @@ class PlanGeneratorTest {
         Exercise("pushup", "Push-up", "Strength", "chest", listOf("triceps"), "bodyweight", "beginner", emptyList(), null),
     )
 
-    private fun profile(equipment: EquipmentAccess = EquipmentAccess.FULL_GYM) = UserProfile(
+    private fun profile(
+        equipment: EquipmentAccess = EquipmentAccess.FULL_GYM,
+        owned: Set<String> = emptySet(),
+    ) = UserProfile(
         displayName = "Test",
         dob = null,
         sexAtBirth = null,
@@ -25,12 +29,23 @@ class PlanGeneratorTest {
         goal = GoalType.HYPERTROPHY,
         weeklyTargetSessions = 3,
         equipment = equipment,
+        ownedEquipment = owned,
         experience = ExperienceLevel.INTERMEDIATE,
         injuryNotes = null,
     )
 
+    /**
+     * Mirrors the filtering the live PlanGenerator does before handing the catalogue to FallbackPlan
+     * or the AI prompt. Keeps test assertions aligned with production behaviour.
+     */
+    private fun filteredFor(p: UserProfile): List<Exercise> {
+        val owned = Equipment.resolve(p.equipment, p.ownedEquipment)
+        return catalogue.filter { ex -> ex.equipment.lowercase().trim().let { it in owned || (it.isBlank() && Equipment.BODYWEIGHT in owned) } }
+    }
+
     @Test fun fallback_buildsDaysWithExercisesFromCatalogue() {
-        val plans = FallbackPlan.build(profile(), io.bubblymarble.fitness.core.ai.PlanRequest(3, 45), catalogue, 0L)
+        val p = profile()
+        val plans = FallbackPlan.build(p, PlanRequest(3, 45), filteredFor(p), 0L)
         assertThat(plans).isNotEmpty()
         plans.forEach { tpl ->
             assertThat(tpl.items).isNotEmpty()
@@ -41,16 +56,21 @@ class PlanGeneratorTest {
     }
 
     @Test fun bodyweightOnly_excludesBarbellLifts() {
-        val plans = FallbackPlan.build(
-            profile(EquipmentAccess.BODYWEIGHT_ONLY),
-            io.bubblymarble.fitness.core.ai.PlanRequest(3, 30),
-            catalogue,
-            0L,
-        )
+        val p = profile(EquipmentAccess.BODYWEIGHT_ONLY)
+        val filtered = filteredFor(p)
+        assertThat(filtered.map { it.id }).containsExactly("pushup")
+        val plans = FallbackPlan.build(p, PlanRequest(3, 30), filtered, 0L)
         plans.flatMap { it.items }.forEach { item ->
             val ex = catalogue.first { it.id == item.exerciseId }
-            assertThat(ex.equipment.lowercase()).contains("body")
+            assertThat(ex.equipment.lowercase()).isEqualTo("bodyweight")
         }
+    }
+
+    @Test fun minimalHome_filtersByOwnedSet() {
+        val p = profile(EquipmentAccess.MINIMAL_HOME, owned = setOf(Equipment.DUMBBELL))
+        val filtered = filteredFor(p)
+        // Catalogue has nothing tagged "dumbbell"; only "bodyweight" stays via the implicit add.
+        assertThat(filtered.map { it.id }).containsExactly("pushup")
     }
 
     @Test fun aiOutput_filtersUnknownExerciseIds() {

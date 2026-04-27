@@ -52,6 +52,7 @@ fun WorkoutTemplateEntity.toDomain(items: List<WorkoutTemplateExerciseEntity>) =
             targetReps = it.targetReps,
             targetDurationSec = it.targetDurationSec,
             targetRestSec = it.targetRestSec,
+            targetWeightKg = it.targetWeightKg,
             notes = it.notes,
         )
     },
@@ -74,6 +75,7 @@ fun TemplateItem.toEntity(templateId: Long) = WorkoutTemplateExerciseEntity(
     targetReps = targetReps,
     targetDurationSec = targetDurationSec,
     targetRestSec = targetRestSec,
+    targetWeightKg = targetWeightKg,
     notes = notes,
 )
 
@@ -109,6 +111,7 @@ fun UserProfileEntity.toDomain() = UserProfile(
     goal = runCatching { GoalType.valueOf(goalType) }.getOrDefault(GoalType.GENERAL_FITNESS),
     weeklyTargetSessions = weeklyTargetSessions,
     equipment = runCatching { EquipmentAccess.valueOf(equipmentAccess) }.getOrDefault(EquipmentAccess.BODYWEIGHT_ONLY),
+    ownedEquipment = ownedEquipment.split(LIST_SEP).filter { it.isNotBlank() }.toSet(),
     experience = runCatching { ExperienceLevel.valueOf(experienceLevel) }.getOrDefault(ExperienceLevel.BEGINNER),
     injuryNotes = injuryNotes,
 )
@@ -121,6 +124,7 @@ fun UserProfile.toEntity(createdAtEpochMs: Long) = UserProfileEntity(
     goalType = goal.name,
     weeklyTargetSessions = weeklyTargetSessions,
     equipmentAccess = equipment.name,
+    ownedEquipment = ownedEquipment.joinToString(LIST_SEP),
     experienceLevel = experience.name,
     injuryNotes = injuryNotes,
     createdAtEpochMs = createdAtEpochMs,

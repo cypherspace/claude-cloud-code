@@ -42,5 +42,6 @@ data class WorkoutTemplateExerciseEntity(
     val targetReps: Int?,
     val targetDurationSec: Int?,
     val targetRestSec: Int,
+    val targetWeightKg: Double? = null,
     val notes: String? = null,
 )

@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import io.bubblymarble.fitness.core.data.model.Equipment
 import io.bubblymarble.fitness.core.data.model.EquipmentAccess
 import io.bubblymarble.fitness.core.data.model.ExperienceLevel
 import io.bubblymarble.fitness.core.data.model.GoalType
@@ -76,6 +77,19 @@ fun OnboardingScreen(
             onSelect = viewModel::setEquipment,
         )
 
+        if (state.equipment == EquipmentAccess.MINIMAL_HOME) {
+            SectionHeader("What do you have at home?")
+            Text(
+                "Plans will only use what you tick. Bodyweight is always available.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            EquipmentChecklist(
+                owned = state.ownedEquipment,
+                onToggle = viewModel::toggleEquipment,
+            )
+        }
+
         SectionHeader("Sessions per week: ${state.weeklyTarget}")
         Slider(
             value = state.weeklyTarget.toFloat(),
@@ -91,6 +105,27 @@ fun OnboardingScreen(
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text(if (state.saving) "Setting up…" else "Get started")
+        }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun EquipmentChecklist(
+    owned: Set<String>,
+    onToggle: (String) -> Unit,
+) {
+    FlowRow(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Equipment.homeChecklist.forEach { item ->
+            FilterChip(
+                selected = item.slug in owned,
+                onClick = { onToggle(item.slug) },
+                label = { Text(item.label) },
+            )
         }
     }
 }
