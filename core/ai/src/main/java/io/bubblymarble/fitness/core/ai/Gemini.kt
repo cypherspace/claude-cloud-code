@@ -5,6 +5,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
@@ -18,25 +19,64 @@ class GeminiClient @Inject constructor(
     @IoDispatcher private val io: CoroutineDispatcher,
 ) {
     private val http = OkHttpClient.Builder().build()
-    private val json = Json { ignoreUnknownKeys = true; encodeDefaults = true }
+    private val json = Json { ignoreUnknownKeys = true; encodeDefaults = false }
 
-    /**
-     * Calls the Gemini `generateContent` endpoint with [prompt] and a JSON [responseSchema].
-     * Returns the raw JSON text emitted by the model. Throws on transport/HTTP failures or when
-     * the model returns no candidates.
-     */
+    /** Text-only generation with a JSON response schema. */
     suspend fun generateJson(
         apiKey: String,
         model: String = DEFAULT_MODEL,
         prompt: String,
         responseSchema: JsonElement,
+        temperature: Float = 0.6f,
+    ): String = call(
+        apiKey = apiKey,
+        model = model,
+        parts = listOf(GeminiPart(text = prompt)),
+        responseSchema = responseSchema,
+        temperature = temperature,
+    )
+
+    /**
+     * Multimodal generation: sends [prompt] together with one inline image. [imageBytes] should
+     * be the raw bytes of a JPEG/PNG. The model returns JSON conforming to [responseSchema].
+     */
+    suspend fun generateJsonWithImage(
+        apiKey: String,
+        model: String = VISION_MODEL,
+        prompt: String,
+        imageBytes: ByteArray,
+        imageMimeType: String,
+        responseSchema: JsonElement,
+        temperature: Float = 0.4f,
+    ): String = call(
+        apiKey = apiKey,
+        model = model,
+        parts = listOf(
+            GeminiPart(text = prompt),
+            GeminiPart(
+                inlineData = InlineData(
+                    mimeType = imageMimeType,
+                    data = android.util.Base64.encodeToString(imageBytes, android.util.Base64.NO_WRAP),
+                ),
+            ),
+        ),
+        responseSchema = responseSchema,
+        temperature = temperature,
+    )
+
+    private suspend fun call(
+        apiKey: String,
+        model: String,
+        parts: List<GeminiPart>,
+        responseSchema: JsonElement,
+        temperature: Float,
     ): String = withContext(io) {
         val body = GeminiRequest(
-            contents = listOf(GeminiContent(parts = listOf(GeminiPart(text = prompt)))),
+            contents = listOf(GeminiContent(parts = parts)),
             generationConfig = GenerationConfig(
                 responseMimeType = "application/json",
                 responseSchema = responseSchema,
-                temperature = 0.6f,
+                temperature = temperature,
             ),
         )
         val payload = json.encodeToString(GeminiRequest.serializer(), body)
@@ -57,6 +97,7 @@ class GeminiClient @Inject constructor(
     companion object {
         const val BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models"
         const val DEFAULT_MODEL = "gemini-2.0-flash"
+        const val VISION_MODEL = "gemini-2.0-flash"
         private val JSON_MEDIA = "application/json".toMediaType()
     }
 }
@@ -71,7 +112,16 @@ private data class GeminiRequest(
 private data class GeminiContent(val parts: List<GeminiPart>)
 
 @Serializable
-private data class GeminiPart(val text: String)
+private data class GeminiPart(
+    val text: String? = null,
+    @SerialName("inline_data") val inlineData: InlineData? = null,
+)
+
+@Serializable
+private data class InlineData(
+    @SerialName("mime_type") val mimeType: String,
+    val data: String,
+)
 
 @Serializable
 private data class GenerationConfig(

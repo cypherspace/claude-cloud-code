@@ -7,6 +7,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.ListAlt
+import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -23,6 +24,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import io.bubblymarble.fitness.feature.meals.MealEditorScreen
+import io.bubblymarble.fitness.feature.meals.MealsScreen
 import io.bubblymarble.fitness.feature.onboarding.OnboardingScreen
 import io.bubblymarble.fitness.feature.plans.PlansScreen
 import io.bubblymarble.fitness.feature.settings.SettingsScreen
@@ -35,10 +38,13 @@ private object Routes {
     const val HOME = "home"
     const val PLANS = "plans"
     const val WORKOUTS = "workouts"
+    const val MEALS = "meals"
     const val STATS = "stats"
     const val SETTINGS = "settings"
     const val RUNNER = "runner/{sessionId}"
+    const val MEAL_EDITOR = "meal_editor/{mealId}"
     fun runner(sessionId: Long) = "runner/$sessionId"
+    fun mealEditor(mealId: Long?) = "meal_editor/${mealId ?: 0L}"
 }
 
 @Composable
@@ -65,11 +71,16 @@ fun RootNavHost(state: RootState) {
         composable(Routes.HOME) {
             HomeScaffold(
                 onStartSession = { id -> nav.navigate(Routes.runner(id)) },
+                onAddMeal = { nav.navigate(Routes.mealEditor(null)) },
+                onEditMeal = { id -> nav.navigate(Routes.mealEditor(id)) },
             )
         }
         composable(Routes.RUNNER) { entry ->
             val id = entry.arguments?.getString("sessionId")?.toLongOrNull() ?: 0L
             WorkoutRunnerScreen(sessionId = id, onFinish = { nav.popBackStack() })
+        }
+        composable(Routes.MEAL_EDITOR) {
+            MealEditorScreen(onSaved = { nav.popBackStack() })
         }
     }
 }
@@ -77,11 +88,16 @@ fun RootNavHost(state: RootState) {
 private data class Tab(val route: String, val label: String, val icon: androidx.compose.ui.graphics.vector.ImageVector)
 
 @Composable
-private fun HomeScaffold(onStartSession: (Long) -> Unit) {
+private fun HomeScaffold(
+    onStartSession: (Long) -> Unit,
+    onAddMeal: () -> Unit,
+    onEditMeal: (Long) -> Unit,
+) {
     val nav = rememberNavController()
     val tabs = listOf(
         Tab(Routes.PLANS, "Plans", Icons.Default.ListAlt),
         Tab(Routes.WORKOUTS, "Workouts", Icons.Default.FitnessCenter),
+        Tab(Routes.MEALS, "Meals", Icons.Default.Restaurant),
         Tab(Routes.STATS, "Stats", Icons.Default.BarChart),
         Tab(Routes.SETTINGS, "Settings", Icons.Default.Settings),
     )
@@ -115,6 +131,7 @@ private fun HomeScaffold(onStartSession: (Long) -> Unit) {
         ) {
             composable(Routes.PLANS) { PlansScreen() }
             composable(Routes.WORKOUTS) { WorkoutsScreen(onStartSession = onStartSession) }
+            composable(Routes.MEALS) { MealsScreen(onAddMeal = onAddMeal, onEditMeal = onEditMeal) }
             composable(Routes.STATS) { StatsScreen() }
             composable(Routes.SETTINGS) { SettingsScreen() }
         }

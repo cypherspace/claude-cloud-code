@@ -1,9 +1,10 @@
 # Bubblymarble
 
-A personal fitness app for Android. v1 covers the **workouts** pillar:
-exercise library, AI-generated plans, workout runner with timer, streaks, stats,
-and Health Connect integration. Meals and measurements are scaffolded for later
-phases.
+A personal fitness app for Android.
+
+- v1 — **workouts**: exercise library, AI-generated plans, workout runner with timer, streaks, stats, Health Connect integration.
+- v2 — **meals**: daily nutrition summary, ingredient search powered by Open Food Facts, AI photo logging via Gemini Vision.
+- Phase 3 (planned) — measurements: vitals, body composition from Health Connect.
 
 ## Stack
 
@@ -25,14 +26,15 @@ phases.
 :core:data           — Room DB, DAOs, repositories, streak engine, secure prefs
 :core:designsystem   — theme, reusable Compose components
 :core:health         — Health Connect facade (read + write)
-:core:ai             — Gemini REST client + plan generator + offline fallback
+:core:ai             — Gemini REST client + plan generator + Vision food photo recogniser
+:core:foodapi        — Open Food Facts REST client (search + barcode lookup)
 :core:notifications  — workout foreground service + reminder WorkManager job
 :feature:onboarding
 :feature:plans
 :feature:workouts
 :feature:stats
 :feature:settings
-:feature:meals          (placeholder for phase 2)
+:feature:meals
 :feature:measurements   (placeholder for phase 3)
 ```
 
@@ -83,8 +85,21 @@ set covering the major movement patterns. To swap in the full
 adapt the `SeedExercise` schema. The seeder is idempotent and reads on first
 launch only.
 
+## Meals tracker
+
+- **Manual logging**: search the local ingredient cache; on a thin local match,
+  the editor falls back to Open Food Facts (`world.openfoodfacts.org`) and caches
+  successful hits to the local DB so subsequent searches are instant and offline.
+- **Photo logging**: pick a food photo and the editor sends it to Gemini Vision
+  via the existing API key. The model returns a list of foods with portion-aware
+  nutrition; tap a row to add it to the meal. Suggestions are persisted as
+  `source = gemini-vision` ingredients so they can be reused later.
+- **Daily summary**: kcal/protein/carbs/fat totals, day-by-day navigation, edit
+  or delete previous meals.
+- A barcode entry-point (`MealEditorViewModel.lookupBarcode`) is in place; a
+  CameraX/ML Kit scanner UI can be wired to it without further plumbing.
+
 ## Roadmap
 
-- Phase 2 — Meals: Open Food Facts integration, barcode scan, AI photo logging via Gemini Vision.
 - Phase 3 — Measurements: Health Connect read for weight + body composition (Renpho already publishes there), tape-measure manual entries.
 - Future — Wear OS companion, multi-device cloud sync if desired.

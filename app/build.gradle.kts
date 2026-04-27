@@ -79,6 +79,7 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":core:health"))
     implementation(project(":core:ai"))
+    implementation(project(":core:foodapi"))
     implementation(project(":core:notifications"))
     implementation(project(":feature:onboarding"))
     implementation(project(":feature:plans"))

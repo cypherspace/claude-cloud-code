@@ -29,6 +29,7 @@ include(":core:data")
 include(":core:designsystem")
 include(":core:health")
 include(":core:ai")
+include(":core:foodapi")
 include(":core:notifications")
 
 include(":feature:onboarding")
