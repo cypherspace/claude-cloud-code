@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Bubblymarble</string>
+
+    <string name="nav_plans">Plans</string>
+    <string name="nav_workouts">Workouts</string>
+    <string name="nav_stats">Stats</string>
+    <string name="nav_settings">Settings</string>
+
+    <string name="workout_notification_channel_name">Active workouts</string>
+    <string name="workout_notification_channel_description">Ongoing notification while a workout is in progress.</string>
+    <string name="reminder_notification_channel_name">Workout reminders</string>
+    <string name="reminder_notification_channel_description">Reminders to start scheduled workouts.</string>
+</resources>

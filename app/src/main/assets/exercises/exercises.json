@@ -1,0 +1,366 @@
+[
+  {
+    "id": "barbell_bench_press",
+    "name": "Barbell bench press",
+    "category": "Strength",
+    "primaryMuscle": "chest",
+    "secondaryMuscles": ["triceps", "shoulders"],
+    "equipment": "barbell",
+    "level": "intermediate",
+    "instructions": [
+      "Lie on a flat bench with eyes under the bar.",
+      "Grip slightly wider than shoulder width.",
+      "Unrack and lower to mid-chest with elbows ~45 degrees.",
+      "Press up until elbows are locked."
+    ]
+  },
+  {
+    "id": "pushup",
+    "name": "Push-up",
+    "category": "Strength",
+    "primaryMuscle": "chest",
+    "secondaryMuscles": ["triceps", "shoulders", "core"],
+    "equipment": "bodyweight",
+    "level": "beginner",
+    "instructions": [
+      "Plank position with hands under shoulders.",
+      "Keep body in a straight line.",
+      "Lower chest to within an inch of the floor.",
+      "Press back to start."
+    ]
+  },
+  {
+    "id": "dumbbell_bench_press",
+    "name": "Dumbbell bench press",
+    "category": "Strength",
+    "primaryMuscle": "chest",
+    "secondaryMuscles": ["triceps", "shoulders"],
+    "equipment": "dumbbell",
+    "level": "beginner",
+    "instructions": [
+      "Sit with dumbbells on thighs, kick back to a flat bench position.",
+      "Lower dumbbells to chest level.",
+      "Press up to lockout, then control back down."
+    ]
+  },
+  {
+    "id": "incline_dumbbell_press",
+    "name": "Incline dumbbell press",
+    "category": "Strength",
+    "primaryMuscle": "chest",
+    "secondaryMuscles": ["shoulders", "triceps"],
+    "equipment": "dumbbell",
+    "level": "intermediate",
+    "instructions": [
+      "Set bench to ~30 degrees.",
+      "Press dumbbells from shoulder level to overhead lockout.",
+      "Lower with control."
+    ]
+  },
+  {
+    "id": "pullup",
+    "name": "Pull-up",
+    "category": "Strength",
+    "primaryMuscle": "back",
+    "secondaryMuscles": ["biceps", "core"],
+    "equipment": "bodyweight",
+    "level": "intermediate",
+    "instructions": [
+      "Hang from bar with overhand grip slightly wider than shoulders.",
+      "Pull chest toward bar by driving elbows down.",
+      "Lower under control to a full hang."
+    ]
+  },
+  {
+    "id": "barbell_row",
+    "name": "Barbell row",
+    "category": "Strength",
+    "primaryMuscle": "back",
+    "secondaryMuscles": ["biceps", "core"],
+    "equipment": "barbell",
+    "level": "intermediate",
+    "instructions": [
+      "Hinge at hips, torso roughly 45 degrees.",
+      "Pull bar to lower chest, elbows close.",
+      "Lower with control."
+    ]
+  },
+  {
+    "id": "lat_pulldown",
+    "name": "Lat pulldown",
+    "category": "Strength",
+    "primaryMuscle": "back",
+    "secondaryMuscles": ["biceps"],
+    "equipment": "cable",
+    "level": "beginner",
+    "instructions": [
+      "Set knee pad and grip the bar wider than shoulders.",
+      "Pull bar to upper chest, drive elbows down.",
+      "Resist on the way up."
+    ]
+  },
+  {
+    "id": "seated_cable_row",
+    "name": "Seated cable row",
+    "category": "Strength",
+    "primaryMuscle": "back",
+    "secondaryMuscles": ["biceps"],
+    "equipment": "cable",
+    "level": "beginner",
+    "instructions": [
+      "Sit tall, knees soft.",
+      "Pull handle to lower abs, squeeze shoulder blades.",
+      "Return slowly without rounding back."
+    ]
+  },
+  {
+    "id": "back_squat",
+    "name": "Back squat",
+    "category": "Strength",
+    "primaryMuscle": "quadriceps",
+    "secondaryMuscles": ["glutes", "hamstrings", "core"],
+    "equipment": "barbell",
+    "level": "intermediate",
+    "instructions": [
+      "Bar on upper traps, feet shoulder-width.",
+      "Brace and squat to parallel or below.",
+      "Drive through midfoot to stand."
+    ]
+  },
+  {
+    "id": "goblet_squat",
+    "name": "Goblet squat",
+    "category": "Strength",
+    "primaryMuscle": "quadriceps",
+    "secondaryMuscles": ["glutes", "core"],
+    "equipment": "dumbbell",
+    "level": "beginner",
+    "instructions": [
+      "Hold dumbbell at chest.",
+      "Squat with chest tall, knees tracking toes.",
+      "Stand to lockout."
+    ]
+  },
+  {
+    "id": "bodyweight_squat",
+    "name": "Bodyweight squat",
+    "category": "Strength",
+    "primaryMuscle": "quadriceps",
+    "secondaryMuscles": ["glutes", "hamstrings"],
+    "equipment": "bodyweight",
+    "level": "beginner",
+    "instructions": [
+      "Feet shoulder width, toes slightly out.",
+      "Squat to comfortable depth.",
+      "Stand tall."
+    ]
+  },
+  {
+    "id": "romanian_deadlift",
+    "name": "Romanian deadlift",
+    "category": "Strength",
+    "primaryMuscle": "hamstrings",
+    "secondaryMuscles": ["glutes", "back"],
+    "equipment": "barbell",
+    "level": "intermediate",
+    "instructions": [
+      "Hinge at hips with soft knees.",
+      "Lower bar along thighs to mid-shin.",
+      "Drive hips forward to stand."
+    ]
+  },
+  {
+    "id": "deadlift",
+    "name": "Conventional deadlift",
+    "category": "Strength",
+    "primaryMuscle": "hamstrings",
+    "secondaryMuscles": ["glutes", "back", "core"],
+    "equipment": "barbell",
+    "level": "advanced",
+    "instructions": [
+      "Bar over midfoot, hands just outside knees.",
+      "Brace, hinge, push the floor away.",
+      "Lockout with hips and knees aligned."
+    ]
+  },
+  {
+    "id": "walking_lunge",
+    "name": "Walking lunge",
+    "category": "Strength",
+    "primaryMuscle": "quadriceps",
+    "secondaryMuscles": ["glutes", "hamstrings"],
+    "equipment": "bodyweight",
+    "level": "beginner",
+    "instructions": [
+      "Step forward into a lunge, knee tracks toe.",
+      "Push off front foot to stand.",
+      "Alternate legs."
+    ]
+  },
+  {
+    "id": "hip_thrust",
+    "name": "Hip thrust",
+    "category": "Strength",
+    "primaryMuscle": "glutes",
+    "secondaryMuscles": ["hamstrings"],
+    "equipment": "barbell",
+    "level": "intermediate",
+    "instructions": [
+      "Upper back on bench, bar over hips.",
+      "Drive hips up to lockout.",
+      "Lower with control."
+    ]
+  },
+  {
+    "id": "overhead_press",
+    "name": "Standing overhead press",
+    "category": "Strength",
+    "primaryMuscle": "shoulders",
+    "secondaryMuscles": ["triceps", "core"],
+    "equipment": "barbell",
+    "level": "intermediate",
+    "instructions": [
+      "Bar at shoulders, elbows under wrists.",
+      "Brace and press overhead, head through at lockout.",
+      "Lower under control."
+    ]
+  },
+  {
+    "id": "dumbbell_shoulder_press",
+    "name": "Dumbbell shoulder press",
+    "category": "Strength",
+    "primaryMuscle": "shoulders",
+    "secondaryMuscles": ["triceps"],
+    "equipment": "dumbbell",
+    "level": "beginner",
+    "instructions": [
+      "Sit upright, dumbbells at shoulders.",
+      "Press overhead.",
+      "Lower to start."
+    ]
+  },
+  {
+    "id": "lateral_raise",
+    "name": "Lateral raise",
+    "category": "Strength",
+    "primaryMuscle": "shoulders",
+    "secondaryMuscles": [],
+    "equipment": "dumbbell",
+    "level": "beginner",
+    "instructions": [
+      "Stand tall, slight forward lean.",
+      "Raise dumbbells to shoulder height with soft elbows.",
+      "Lower slowly."
+    ]
+  },
+  {
+    "id": "biceps_curl",
+    "name": "Dumbbell biceps curl",
+    "category": "Strength",
+    "primaryMuscle": "biceps",
+    "secondaryMuscles": [],
+    "equipment": "dumbbell",
+    "level": "beginner",
+    "instructions": [
+      "Stand tall, elbows pinned to sides.",
+      "Curl to shoulder, supinate grip.",
+      "Lower with control."
+    ]
+  },
+  {
+    "id": "triceps_pushdown",
+    "name": "Cable triceps pushdown",
+    "category": "Strength",
+    "primaryMuscle": "triceps",
+    "secondaryMuscles": [],
+    "equipment": "cable",
+    "level": "beginner",
+    "instructions": [
+      "Elbows pinned, push handle down to lockout.",
+      "Return to chest level under control."
+    ]
+  },
+  {
+    "id": "plank",
+    "name": "Plank hold",
+    "category": "Core",
+    "primaryMuscle": "core",
+    "secondaryMuscles": ["shoulders"],
+    "equipment": "bodyweight",
+    "level": "beginner",
+    "instructions": [
+      "Forearms under shoulders.",
+      "Body straight, glutes squeezed.",
+      "Breathe."
+    ]
+  },
+  {
+    "id": "hanging_knee_raise",
+    "name": "Hanging knee raise",
+    "category": "Core",
+    "primaryMuscle": "core",
+    "secondaryMuscles": ["hip_flexors"],
+    "equipment": "bodyweight",
+    "level": "intermediate",
+    "instructions": [
+      "Hang from a bar.",
+      "Curl knees toward chest.",
+      "Lower under control."
+    ]
+  },
+  {
+    "id": "calf_raise",
+    "name": "Standing calf raise",
+    "category": "Strength",
+    "primaryMuscle": "calves",
+    "secondaryMuscles": [],
+    "equipment": "bodyweight",
+    "level": "beginner",
+    "instructions": [
+      "Stand on a step or floor.",
+      "Press up onto balls of feet.",
+      "Lower under stretch."
+    ]
+  },
+  {
+    "id": "running_easy",
+    "name": "Easy run",
+    "category": "Cardio",
+    "primaryMuscle": "cardio",
+    "secondaryMuscles": ["quadriceps", "calves"],
+    "equipment": "bodyweight",
+    "level": "beginner",
+    "instructions": [
+      "Conversational pace.",
+      "Land midfoot.",
+      "Relax shoulders."
+    ]
+  },
+  {
+    "id": "rowing_machine",
+    "name": "Rowing machine",
+    "category": "Cardio",
+    "primaryMuscle": "cardio",
+    "secondaryMuscles": ["back", "quadriceps"],
+    "equipment": "machine",
+    "level": "beginner",
+    "instructions": [
+      "Drive with legs first.",
+      "Lean back slightly, pull handle to ribs.",
+      "Return: arms, body, legs."
+    ]
+  },
+  {
+    "id": "jump_rope",
+    "name": "Jump rope",
+    "category": "Cardio",
+    "primaryMuscle": "cardio",
+    "secondaryMuscles": ["calves"],
+    "equipment": "bodyweight",
+    "level": "beginner",
+    "instructions": [
+      "Soft knees, light bounce.",
+      "Wrist rotation drives the rope, not arms."
+    ]
+  }
+]
