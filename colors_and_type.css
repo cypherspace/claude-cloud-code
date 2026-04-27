@@ -1,0 +1,262 @@
+/* =====================================================================
+   Bubblymarble Design Tokens
+   Sourced from core/designsystem/.../Theme.kt + Material 3 defaults.
+   Dark mode is the default scheme at build time; light is a fallback.
+   ===================================================================== */
+
+/* Webfonts: Inter as a free near-match for the OEM default (Roboto).
+   Replace with brand-licensed fonts when available. */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
+
+:root {
+  /* ------------------------------------------------------------------
+     Color — Dark scheme (default)
+     ------------------------------------------------------------------ */
+  --m3-primary:        #38BDF8;  /* sky-400  — CTAs, brand */
+  --m3-on-primary:     #002B3D;
+  --m3-secondary:      #2DD4BF;  /* teal-400 — accent */
+  --m3-on-secondary:   #003733;
+  --m3-background:     #0B1220;  /* app bg */
+  --m3-on-background:  #E2E8F0;  /* slate-200 */
+  --m3-surface:        #111827;  /* card */
+  --m3-on-surface:     #E2E8F0;
+  --m3-surface-variant:#1F2937;  /* slate-800 — input bg, divider field */
+  --m3-on-surface-variant: #94A3B8;
+  --m3-outline:        #334155;  /* slate-700 */
+  --m3-outline-variant:#1F2937;
+  --m3-error:          #F87171;
+  --m3-on-error:       #450A0A;
+
+  /* Tonal elevation (dark mode renders elevation as a lighter tint, not shadow) */
+  --m3-surface-elev-1: #131C2E;
+  --m3-surface-elev-2: #182238;
+  --m3-surface-elev-3: #1D2942;
+
+  /* ------------------------------------------------------------------
+     Feature accents (proposed extension; sit alongside sky/teal)
+     Use sparingly — small marks only, never backgrounds.
+     ------------------------------------------------------------------ */
+  --feat-plans:    #A78BFA; /* violet-400 */
+  --feat-workouts: #38BDF8; /* sky-400 (primary) */
+  --feat-meals:    #34D399; /* emerald-400 */
+  --feat-body:     #FBBF24; /* amber-400 */
+  --feat-stats:    #F472B6; /* pink-400 */
+  --feat-settings: #94A3B8; /* slate-400 */
+
+  /* Status */
+  --status-success: #34D399;
+  --status-warning: #FBBF24;
+  --status-danger:  #F87171;
+
+  /* Launcher */
+  --launcher-bg: #0EA5E9;
+
+  /* ------------------------------------------------------------------
+     Type
+     ------------------------------------------------------------------ */
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Material 3 type scale (px) — line-height in unitless ratio */
+  --type-display-large:  57px; --lh-display-large:  64px;
+  --type-display-medium: 45px; --lh-display-medium: 52px;
+  --type-display-small:  36px; --lh-display-small:  44px;
+
+  --type-headline-large:  32px; --lh-headline-large:  40px;
+  --type-headline-medium: 28px; --lh-headline-medium: 36px;
+  --type-headline-small:  24px; --lh-headline-small:  32px;
+
+  --type-title-large:  22px; --lh-title-large:  28px;
+  --type-title-medium: 16px; --lh-title-medium: 24px; --tracking-title-medium: 0.15px;
+  --type-title-small:  14px; --lh-title-small:  20px; --tracking-title-small: 0.1px;
+
+  --type-body-large:  16px; --lh-body-large:  24px; --tracking-body-large: 0.5px;
+  --type-body-medium: 14px; --lh-body-medium: 20px; --tracking-body-medium: 0.25px;
+  --type-body-small:  12px; --lh-body-small:  16px; --tracking-body-small: 0.4px;
+
+  --type-label-large:  14px; --lh-label-large:  20px; --tracking-label-large:  0.1px;
+  --type-label-medium: 12px; --lh-label-medium: 16px; --tracking-label-medium: 0.5px;
+  --type-label-small:  11px; --lh-label-small:  16px; --tracking-label-small:  0.5px;
+
+  /* Weights */
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  /* ------------------------------------------------------------------
+     Spacing (4 dp grid)
+     ------------------------------------------------------------------ */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+
+  /* Screen padding (matches Compose `.padding(16.dp)` in feature screens) */
+  --screen-pad: 16px;
+
+  /* ------------------------------------------------------------------
+     Radii (Material 3 shape scale)
+     ------------------------------------------------------------------ */
+  --radius-xs: 4px;   /* text fields */
+  --radius-sm: 8px;
+  --radius-md: 12px;  /* cards (canonical) */
+  --radius-lg: 16px;  /* sheets */
+  --radius-xl: 28px;  /* large hero surfaces */
+  --radius-pill: 9999px; /* M3 buttons (stadium) */
+
+  /* ------------------------------------------------------------------
+     Motion (Material 3 standard)
+     ------------------------------------------------------------------ */
+  --easing-standard:        cubic-bezier(0.2, 0.0, 0.0, 1.0);
+  --easing-emphasized:      cubic-bezier(0.2, 0.0, 0.0, 1.0);
+  --easing-decelerate:      cubic-bezier(0.0, 0.0, 0.0, 1.0);
+  --duration-short-1: 100ms;
+  --duration-short-2: 150ms;
+  --duration-medium-1: 200ms;
+  --duration-medium-2: 250ms;
+  --duration-long-1: 400ms;
+
+  /* Default body/foreground aliases */
+  --bg: var(--m3-background);
+  --fg: var(--m3-on-background);
+  --bg-card: var(--m3-surface);
+  --bg-card-hover: var(--m3-surface-elev-2);
+  --fg-muted: var(--m3-on-surface-variant);
+  --border: var(--m3-outline-variant);
+}
+
+/* ====================================================================
+   Light scheme override (matches Theme.kt lightColorScheme)
+   Apply via [data-theme="light"] on <html> or <body>.
+   ==================================================================== */
+[data-theme="light"] {
+  --m3-primary:        #0EA5E9;
+  --m3-on-primary:     #FFFFFF;
+  --m3-secondary:      #14B8A6;
+  --m3-on-secondary:   #FFFFFF;
+  --m3-background:    #F8FAFC;
+  --m3-on-background:  #0B1220;
+  --m3-surface:        #FFFFFF;
+  --m3-on-surface:     #0B1220;
+  --m3-surface-variant:#E2E8F0;
+  --m3-on-surface-variant: #475569;
+  --m3-outline:        #CBD5E1;
+  --m3-outline-variant:#E2E8F0;
+
+  --m3-surface-elev-1: #FFFFFF;
+  --m3-surface-elev-2: #F1F5F9;
+  --m3-surface-elev-3: #E2E8F0;
+}
+
+/* ====================================================================
+   Semantic typography utilities
+   Match the M3 styles called from Compose screens.
+   ==================================================================== */
+html, body {
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11", "tnum"; /* tabular figures for numerics */
+}
+
+/* Material Icons rely on the `liga` feature to substitute keyword text with glyphs.
+   Re-enable it explicitly so the global font-feature-settings above doesn't kill it. */
+.material-icons {
+  font-feature-settings: "liga";
+  -webkit-font-feature-settings: "liga";
+  background: var(--bg);
+  color: var(--fg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.t-display-large    { font-size: var(--type-display-large);    line-height: var(--lh-display-large);    font-weight: var(--fw-regular); letter-spacing: -0.25px; }
+.t-display-medium   { font-size: var(--type-display-medium);   line-height: var(--lh-display-medium);   font-weight: var(--fw-regular); }
+.t-display-small    { font-size: var(--type-display-small);    line-height: var(--lh-display-small);    font-weight: var(--fw-regular); }
+
+.t-headline-large   { font-size: var(--type-headline-large);   line-height: var(--lh-headline-large);   font-weight: var(--fw-regular); }
+.t-headline-medium  { font-size: var(--type-headline-medium);  line-height: var(--lh-headline-medium);  font-weight: var(--fw-regular); }
+.t-headline-small   { font-size: var(--type-headline-small);   line-height: var(--lh-headline-small);   font-weight: var(--fw-regular); } /* screen titles */
+
+.t-title-large      { font-size: var(--type-title-large);      line-height: var(--lh-title-large);      font-weight: var(--fw-medium); }
+.t-title-medium     { font-size: var(--type-title-medium);     line-height: var(--lh-title-medium);     font-weight: var(--fw-medium); letter-spacing: 0.15px; }
+.t-title-small      { font-size: var(--type-title-small);      line-height: var(--lh-title-small);      font-weight: var(--fw-medium); letter-spacing: 0.1px; }
+
+.t-body-large       { font-size: var(--type-body-large);       line-height: var(--lh-body-large);       font-weight: var(--fw-regular); letter-spacing: 0.5px; }
+.t-body-medium      { font-size: var(--type-body-medium);      line-height: var(--lh-body-medium);      font-weight: var(--fw-regular); letter-spacing: 0.25px; }
+.t-body-small       { font-size: var(--type-body-small);       line-height: var(--lh-body-small);       font-weight: var(--fw-regular); letter-spacing: 0.4px; color: var(--fg-muted); }
+
+.t-label-large      { font-size: var(--type-label-large);      line-height: var(--lh-label-large);      font-weight: var(--fw-medium); letter-spacing: 0.1px; }
+.t-label-medium     { font-size: var(--type-label-medium);     line-height: var(--lh-label-medium);     font-weight: var(--fw-medium); letter-spacing: 0.5px; }
+.t-label-small      { font-size: var(--type-label-small);      line-height: var(--lh-label-small);      font-weight: var(--fw-medium); letter-spacing: 0.5px; }
+
+.t-mono             { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+/* ====================================================================
+   Common building blocks (web mirror of M3 Compose patterns)
+   ==================================================================== */
+.bm-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: var(--sp-4);
+}
+.bm-card-elev-1 { background: var(--m3-surface-elev-1); }
+.bm-card-elev-2 { background: var(--m3-surface-elev-2); }
+
+.bm-btn-filled {
+  background: var(--m3-primary);
+  color: var(--m3-on-primary);
+  border-radius: var(--radius-pill);
+  padding: 10px 24px;
+  border: 0;
+  font: var(--fw-medium) var(--type-label-large)/var(--lh-label-large) var(--font-sans);
+  letter-spacing: 0.1px;
+  cursor: pointer;
+  transition: background var(--duration-short-2) var(--easing-standard);
+}
+.bm-btn-filled:hover  { filter: brightness(1.05); }
+.bm-btn-filled:active { filter: brightness(0.95); }
+.bm-btn-filled[disabled] { opacity: 0.38; cursor: not-allowed; }
+
+.bm-btn-outlined {
+  background: transparent;
+  color: var(--m3-primary);
+  border: 1px solid var(--m3-outline);
+  border-radius: var(--radius-pill);
+  padding: 10px 24px;
+  font: var(--fw-medium) var(--type-label-large)/var(--lh-label-large) var(--font-sans);
+  cursor: pointer;
+}
+
+.bm-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--m3-outline);
+  font: var(--fw-medium) var(--type-label-large)/var(--lh-label-large) var(--font-sans);
+  background: transparent;
+  color: var(--fg);
+  cursor: pointer;
+}
+.bm-chip[aria-pressed="true"], .bm-chip.is-selected {
+  background: color-mix(in oklab, var(--m3-primary) 22%, transparent);
+  border-color: var(--m3-primary);
+  color: var(--m3-primary);
+}
+
+.bm-stat-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: var(--sp-4);
+}
+.bm-stat-card .label { font: var(--fw-medium) var(--type-label-medium)/var(--lh-label-medium) var(--font-sans); color: var(--fg-muted); letter-spacing: 0.5px; }
+.bm-stat-card .value { font: var(--fw-regular) var(--type-headline-medium)/var(--lh-headline-medium) var(--font-sans); margin-top: 4px; }
+
+.bm-divider { height: 1px; background: var(--m3-outline-variant); width: 100%; }
+
+.bm-meta { color: var(--fg-muted); }
+.bm-meta-sep::before { content: " · "; color: var(--fg-muted); }
