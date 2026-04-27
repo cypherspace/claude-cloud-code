@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 56" width="200" height="56">
+  <g transform="translate(8,8)">
+    <rect width="40" height="40" rx="8" fill="#0EA5E9"></rect>
+    <path fill="#FFFFFF" transform="translate(20,20) scale(0.37) translate(-54,-54)" d="M54,30c-13.3,0 -24,10.7 -24,24s10.7,24 24,24 24,-10.7 24,-24S67.3,30 54,30zM54,72c-9.9,0 -18,-8.1 -18,-18s8.1,-18 18,-18 18,8.1 18,18 -8.1,18 -18,18z"></path>
+    <path fill="#FFFFFF" transform="translate(20,20) scale(0.37) translate(-54,-54)" d="M51,42h6v24h-6z"></path>
+  </g>
+  <text x="60" y="36" font-family="Inter, system-ui, sans-serif" font-weight="600" font-size="22" fill="#E2E8F0" letter-spacing="-0.3">Bubblymarble</text>
+</svg>
