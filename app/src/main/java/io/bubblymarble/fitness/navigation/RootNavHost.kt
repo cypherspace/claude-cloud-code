@@ -18,6 +18,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -27,6 +28,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import io.bubblymarble.fitness.feature.meals.MealEditorScreen
 import io.bubblymarble.fitness.feature.meals.MealsScreen
+import io.bubblymarble.fitness.feature.meals.scanner.BarcodeScannerScreen
 import io.bubblymarble.fitness.feature.measurements.MeasurementsScreen
 import io.bubblymarble.fitness.feature.onboarding.OnboardingScreen
 import io.bubblymarble.fitness.feature.plans.PlansScreen
@@ -46,6 +48,8 @@ private object Routes {
     const val SETTINGS = "settings"
     const val RUNNER = "runner/{sessionId}"
     const val MEAL_EDITOR = "meal_editor/{mealId}"
+    const val MEAL_SCANNER = "meal_scanner"
+    const val SCANNED_BARCODE_KEY = "scanned_barcode"
     fun runner(sessionId: Long) = "runner/$sessionId"
     fun mealEditor(mealId: Long?) = "meal_editor/${mealId ?: 0L}"
 }
@@ -82,8 +86,25 @@ fun RootNavHost(state: RootState) {
             val id = entry.arguments?.getString("sessionId")?.toLongOrNull() ?: 0L
             WorkoutRunnerScreen(sessionId = id, onFinish = { nav.popBackStack() })
         }
-        composable(Routes.MEAL_EDITOR) {
-            MealEditorScreen(onSaved = { nav.popBackStack() })
+        composable(Routes.MEAL_EDITOR) { entry ->
+            val barcode by entry.savedStateHandle
+                .getStateFlow<String?>(Routes.SCANNED_BARCODE_KEY, null)
+                .collectAsStateWithLifecycle()
+            MealEditorScreen(
+                onSaved = { nav.popBackStack() },
+                onScanBarcode = { nav.navigate(Routes.MEAL_SCANNER) },
+                scannedBarcode = barcode,
+                onBarcodeConsumed = { entry.savedStateHandle[Routes.SCANNED_BARCODE_KEY] = null },
+            )
+        }
+        composable(Routes.MEAL_SCANNER) {
+            BarcodeScannerScreen(
+                onScanned = { value ->
+                    nav.previousBackStackEntry?.savedStateHandle?.set(Routes.SCANNED_BARCODE_KEY, value)
+                    nav.popBackStack()
+                },
+                onCancel = { nav.popBackStack() },
+            )
         }
     }
 }

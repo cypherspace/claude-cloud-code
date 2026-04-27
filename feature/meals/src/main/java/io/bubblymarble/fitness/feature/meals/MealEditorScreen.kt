@@ -33,6 +33,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -49,10 +50,19 @@ import io.bubblymarble.fitness.core.data.model.MealType
 @Composable
 fun MealEditorScreen(
     onSaved: () -> Unit,
+    onScanBarcode: () -> Unit = {},
+    scannedBarcode: String? = null,
+    onBarcodeConsumed: () -> Unit = {},
     viewModel: MealEditorViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
+
+    LaunchedEffect(scannedBarcode) {
+        val code = scannedBarcode ?: return@LaunchedEffect
+        viewModel.lookupBarcode(code)
+        onBarcodeConsumed()
+    }
 
     val photoLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         if (uri == null) return@rememberLauncherForActivityResult
@@ -118,6 +128,10 @@ fun MealEditorScreen(
             )
             Button(onClick = viewModel::runSearch, enabled = !state.searching) { Text("Find") }
         }
+        OutlinedButton(
+            onClick = onScanBarcode,
+            modifier = Modifier.fillMaxWidth(),
+        ) { Text("Scan barcode") }
         if (state.searchResults.isNotEmpty()) {
             LazyColumn(modifier = Modifier.height(220.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 items(state.searchResults, key = { it.id }) { ing ->

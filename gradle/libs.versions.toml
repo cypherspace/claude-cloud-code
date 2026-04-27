@@ -18,6 +18,8 @@ kotlinxSerialization = "1.7.3"
 kotlinxCoroutines = "1.9.0"
 okhttp = "4.12.0"
 vico = "2.0.0"
+cameraX = "1.4.1"
+mlkitBarcode = "17.3.0"
 junit = "4.13.2"
 androidxJunit = "1.2.1"
 truth = "1.4.4"
@@ -72,6 +74,13 @@ okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor",
 
 vico-compose = { group = "com.patrykandpatrick.vico", name = "compose", version.ref = "vico" }
 vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
+
+androidx-camera-core = { group = "androidx.camera", name = "camera-core", version.ref = "cameraX" }
+androidx-camera-camera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "cameraX" }
+androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "cameraX" }
+androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "cameraX" }
+
+mlkit-barcode-scanning = { group = "com.google.mlkit", name = "barcode-scanning", version.ref = "mlkitBarcode" }
 
 desugar-jdk-libs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugar" }
 

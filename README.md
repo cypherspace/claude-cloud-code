@@ -96,8 +96,11 @@ launch only.
   `source = gemini-vision` ingredients so they can be reused later.
 - **Daily summary**: kcal/protein/carbs/fat totals, day-by-day navigation, edit
   or delete previous meals.
-- A barcode entry-point (`MealEditorViewModel.lookupBarcode`) is in place; a
-  CameraX/ML Kit scanner UI can be wired to it without further plumbing.
+- **Barcode scanner**: tap **Scan barcode** in the meal editor to open a
+  full-screen CameraX preview backed by Google ML Kit's on-device barcode
+  scanner. Decodes EAN-8/13, UPC-A/E, and Code 128 entirely on-device — no
+  network, no API key. The scanned digits are looked up in the local cache
+  first, then Open Food Facts, and the result is added to the current meal.
 
 ## Measurements tracker
 
