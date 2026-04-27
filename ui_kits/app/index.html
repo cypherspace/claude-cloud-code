@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Bubblymarble — App UI kit</title>
+<link rel="stylesheet" href="../../colors_and_type.css"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+<style>
+  body { margin: 0; padding: 32px; background: #0B1220; min-height: 100vh; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  .hint { color: #94A3B8; font-family: Inter, system-ui, sans-serif; font-size: 13px; max-width: 412px; text-align: center; }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+<div class="hint">Click-thru prototype · onboarding → plans → workouts → runner · tap any tab</div>
+<script type="text/babel" src="android-frame.jsx"></script>
+<script type="text/babel" src="Components.jsx"></script>
+<script type="text/babel" src="Screens.jsx"></script>
+<script type="text/babel">
+
+const TABS = [
+  { id: 'plans', label: 'Plans', icon: 'list_alt' },
+  { id: 'workouts', label: 'Workouts', icon: 'fitness_center' },
+  { id: 'meals', label: 'Meals', icon: 'restaurant' },
+  { id: 'body', label: 'Body', icon: 'straighten' },
+  { id: 'stats', label: 'Stats', icon: 'bar_chart' },
+  { id: 'settings', label: 'Settings', icon: 'settings' },
+];
+
+function App() {
+  const [route, setRoute] = React.useState('onboarding'); // onboarding | tab | runner
+  const [tab, setTab] = React.useState('plans');
+  const [plans, setPlans] = React.useState([]);
+  const [generating, setGenerating] = React.useState(false);
+  const [stats, setStats] = React.useState({
+    streak: 12, longest: 28, sessions: 47, last7d: 4, totalSets: 612, volume: 18420,
+  });
+
+  const generate = () => {
+    setGenerating(true);
+    setTimeout(() => {
+      setPlans([
+        { id: 1, name: 'Upper / lower split', exercises: 24, ai: true, description: '4 sessions · 45 min · home gym' },
+        { id: 2, name: 'Push / pull / legs', exercises: 30, ai: true, description: '5 sessions · 50 min · full gym' },
+      ]);
+      setGenerating(false);
+    }, 1100);
+  };
+
+  const templates = plans.length ? [
+    { id: 1, name: 'Upper A · push focus', count: 6 },
+    { id: 2, name: 'Lower A · squat focus', count: 5 },
+  ] : [];
+
+  const meals = [
+    { id: 1, name: 'Overnight oats', type: 'Breakfast', kcal: 410, p: 18, c: 62, f: 9, items: 'Oats (60g), milk (200g), berries (80g)' },
+    { id: 2, name: 'Chicken & rice', type: 'Lunch',     kcal: 680, p: 52, c: 78, f: 14, items: 'Chicken breast (180g), rice (120g)' },
+    { id: 3, name: 'Yogurt & nuts',  type: 'Snack',     kcal: 240, p: 14, c: 18, f: 12, items: 'Greek yogurt (200g), walnuts (20g)' },
+  ];
+  const totals = { kcal: 1330, p: 84, c: 158, f: 35 };
+
+  const runnerSession = {
+    name: 'Upper A · push focus',
+    idx: 1, total: 6,
+    exercise: 'Bench press',
+    set: 2, totalSets: 4,
+    targetReps: 8,
+  };
+
+  let screen = null;
+  if (route === 'onboarding') {
+    screen = <OnboardingScreen onDone={() => setRoute('tab')} />;
+  } else if (route === 'runner') {
+    screen = <RunnerScreen session={runnerSession}
+      onComplete={() => setRoute('tab')} onCancel={() => setRoute('tab')} />;
+  } else {
+    if (tab === 'plans') screen = <PlansScreen onGenerate={generate} plans={plans} generating={generating} />;
+    else if (tab === 'workouts') screen = <WorkoutsScreen templates={templates} onStart={() => setRoute('runner')} />;
+    else if (tab === 'meals') screen = <MealsScreen
+      date="Thu, 24 Apr" totals={totals} meals={meals}
+      onPrev={() => {}} onNext={() => {}} onToday={() => {}} onAdd={() => {}} onEdit={() => {}} />;
+    else if (tab === 'body') screen = <BodyScreen
+      latest={{ weight: 82.4, bf: 18.2, lean: 67.4, bmr: 1720 }}
+      weights={[83.6, 83.2, 82.9, 83.1, 82.7, 82.5, 82.6, 82.4]} />;
+    else if (tab === 'stats') screen = <StatsScreen stats={stats} />;
+    else if (tab === 'settings') screen = <SettingsScreen />;
+  }
+
+  const content = (
+    <div style={{
+      position: 'relative', height: '100%', overflow: 'auto',
+      background: BMC.bg, color: BMC.onSurface,
+    }}>
+      {screen}
+      {route === 'tab' && (
+        <div style={{ position: 'sticky', bottom: 0, left: 0, right: 0 }}>
+          <BMNavBar tabs={TABS} current={tab} onSelect={setTab} />
+        </div>
+      )}
+    </div>
+  );
+
+  return (
+    <AndroidDevice width={412} height={892} dark={true}>
+      <div style={{ height: '100%', background: BMC.bg }}>
+        {content}
+      </div>
+    </AndroidDevice>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
